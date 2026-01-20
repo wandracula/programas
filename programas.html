@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Central de Programas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI', sans-serif;
+  background:#f4f6f8;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#0f4cb8,#1a73e8);
+  color:white;
+  padding:35px 20px;
+  text-align:center;
+  position:relative;
+}
+.header h1{margin:0;font-size:34px}
+.header p{margin-top:8px;opacity:.95}
+.logout{
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:#dc3545;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* SEARCH */
+.search-box{
+  max-width:500px;
+  margin:30px auto;
+}
+.search-box input{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border-radius:30px;
+  border:1px solid #ccc;
+}
+
+/* GRID */
+.container{
+  max-width:1300px;
+  margin:auto;
+  padding:0 20px 60px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+.card{
+  background:white;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 15px 35px rgba(0,0,0,.08);
+  transition:.3s;
+  display:flex;
+  flex-direction:column;
+}
+.card:hover{
+  transform:translateY(-6px);
+}
+.icon{font-size:40px;margin-bottom:10px}
+.card h3{margin:0}
+.card p{
+  font-size:14px;
+  margin:10px 0;
+  flex:1;
+}
+.btn{
+  text-align:center;
+  padding:12px;
+  border-radius:30px;
+  background:#1a73e8;
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* FOOTER */
+.footer{
+  background:#111;
+  color:#aaa;
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧩 Central de Programas</h1>
+  <p>Acesso exclusivo para clientes</p>
+  <div class="logout" onclick="logout()">Sair</div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+  <input id="search" placeholder="🔍 Buscar programa...">
+</div>
+
+<!-- PROGRAMAS -->
+<div class="container">
+  <div class="grid" id="programas">
+
+    <div class="card" data-name="google chrome navegador">
+      <div class="icon">🌐</div>
+      <h3>Google Chrome</h3>
+      <p>Navegador rápido e seguro.</p>
+      <a class="btn" href="https://www.google.com/chrome/" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card" data-name="mozilla firefox navegador">
+      <div class="icon">🦊</div>
+      <h3>Mozilla Firefox</h3>
+      <p>Navegador focado em privacidade.</p>
+      <a class="btn" href="https://www.mozilla.org/firefox/" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card" data-name="ccleaner limpeza">
+      <div class="icon">🧹</div>
+      <h3>CCleaner</h3>
+      <p>Limpeza e otimização do sistema.</p>
+      <a class="btn" href="https://www.ccleaner.com/" target="_blank">Acessar</a>
+    </div>
+
+    <div class="card" data-name="antivirus segurança">
+      <div class="icon">🛡️</div>
+      <h3>Antivírus</h3>
+      <p>Proteção contra vírus e ameaças.</p>
+      <a class="btn" href="#" target="_blank">Ver opções</a>
+    </div>
+
+    <div class="card" data-name="drivers hardware">
+      <div class="icon">🧩</div>
+      <h3>Drivers Essenciais</h3>
+      <p>Drivers de vídeo, rede e chipset.</p>
+      <a class="btn" href="#" target="_blank">Baixar</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  © 2026 Assistência Técnica • Área Restrita
+</div>
+
+<script>
+/* 🔥 FIREBASE */
+firebase.initializeApp({
+  apiKey: "AIzaSyBPijStbscjxd37siV7cafBy5thQhrv8KQ",
+  authDomain: "agenda-9dfe3.firebaseapp.com",
+  projectId: "agenda-9dfe3"
+});
+const auth = firebase.auth();
+
+/* 🔐 PROTEÇÃO */
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    window.location.href="index.html";
+  }
+});
+
+/* 🚪 LOGOUT */
+function logout(){
+  auth.signOut().then(()=>{
+    window.location.href="index.html";
+  });
+}
+
+/* 🔍 BUSCA */
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+
+search.addEventListener("input",()=>{
+  const termo = search.value.toLowerCase();
+  cards.forEach(card=>{
+    card.style.display = card.dataset.name.includes(termo)
+      ? "flex"
+      : "none";
+  });
+});
+</script>
+
+</body>
+</html>
